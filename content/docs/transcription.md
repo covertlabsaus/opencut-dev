@@ -1,68 +1,62 @@
-Before you follow anything in this guide, please make sure you've followed the steps in the [README](../../README.md) (under "Optional: Auto-captions (Transcription) Setup").
++++
+title = 'Transcription Service'
+date = '2025-09-26T21:03:00+10:00'
+draft = false
++++
 
-Open your terminal and make sure you're in the `apps/transcription` directory.
+Follow this guide after completing the optional transcription setup steps in the main [README](/docs/getting-started).
 
-1. Create virtual environment
+## 1. Prepare a virtual environment
 
 ```bash
+cd apps/transcription
 python -m venv env
 ```
 
-2. Activate it
+Activate the environment:
 
-**Windows:**
+- **Windows**
+  ```bash
+  env\Scripts\activate
+  ```
+- **macOS/Linux**
+  ```bash
+  source env/bin/activate
+  ```
 
-```bash
-env\Scripts\activate
-```
+> Using VS Code? Run `Python: Select Interpreter` and point it at `env/bin/python` (or `env\Scripts\python.exe` on Windows).
 
-**macOS/Linux:**
-
-```bash
-source env/bin/activate
-```
-
-> Note: if you're using VS Code/Cursor and you're seeing errors with the imports about the modules not being found,
-> You might have to press CTRL + Shift + P -> Python: Select Interpreter -> Enter interpreter path -> Find -> env -> scripts -> python.exe
-
-3. Install libraries/packages/whatever you wanna call them
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Make sure you have a Modal account. If you don't: [create one](https://modal.com/)
+## 2. Configure Modal
 
-> If you don't know what Modal is: it allows us to process the actual audio and transcribe with Whisper by providing the infra to run Python code with a lot of RAM, generally affordable.
+1. Create a [Modal](https://modal.com/) account if you do not have one.
+2. Authenticate the CLI:
 
-5. Once you've got a Modal accoumt, run this:
+   ```bash
+   python -m modal setup
+   ```
 
-```bash
-python -m modal setup
-```
+3. Run a local test (optional):
 
-It's gonna open a browser so you can authenticate.
+   ```bash
+   modal run transcription.py
+   ```
 
-6. Test it if you want to make sure it actually works:
+4. Deploy the transcription function:
 
-```bash
-modal run transcription.py
-```
+   ```bash
+   modal deploy transcription.py
+   ```
 
-6. Deploy the function!
+## 3. Provide Cloudflare R2 secrets
 
-```bash
-modal deploy transcription.py
-```
+The deployed function downloads audio from Cloudflare R2, transcribes it with Whisper, and deletes the object afterwards. Set these environment variables as a Modal secret:
 
-7. Set the required secrets in Modal
-
-So the script we just deployed interacts with Cloudflare to do two things:
-
-- Download the audio (so it can be transcribed with Whisper)
-- Delete the file after processing (privacy)
-
-To do those things, the script needs access to these environment variables:
 ```bash
 CLOUDFLARE_ACCOUNT_ID=your-account-id
 R2_ACCESS_KEY_ID=your-access-key-id
@@ -70,17 +64,8 @@ R2_SECRET_ACCESS_KEY=your-secret-access-key
 R2_BUCKET_NAME=opencut-transcription
 ```
 
-Remember, we set these earlier in `.env.local`.
+1. Visit the [Modal Secrets dashboard](https://modal.com/secrets/mazewinther/main).
+2. Create a custom secret named `opencut-r2-secrets`.
+3. Use **Import .env** and paste the variables from your `.env.local` file.
 
-So let's do it:
-
-   - Go to [Modal Secrets](https://modal.com/secrets/mazewinther/main)
-   - Click "Custom" and enter "opencut-r2-secrets" for the name.
-   - Now you can just click "Import .env" and copy/paste the 4 variables from your `.env.local` file. Copy and paste these only:
-      ```bash
-      CLOUDFLARE_ACCOUNT_ID=your-account-id
-      R2_ACCESS_KEY_ID=your-access-key-id
-      R2_SECRET_ACCESS_KEY=your-secret-access-key
-      R2_BUCKET_NAME=opencut-transcription
-      ```
-    - Click "Done" and you should see some cool particles!
+You are now ready to trigger automatic captions inside OpenCut.

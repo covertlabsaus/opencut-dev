@@ -1,28 +1,30 @@
-# Security Policy
++++
+title = 'Security Policy'
+date = '2025-09-26T21:03:00+10:00'
+draft = false
++++
 
-## Supported Versions
+## Supported versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x.x   | :white_check_mark: |
+| Version | Supported |
+|---------|-----------|
+| 1.x.x   | ✅        |
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-We take security vulnerabilities seriously. If you discover a security vulnerability within OpenCut, please send an email to security@opencut.app. All security vulnerabilities will be promptly addressed.
+Email [security@opencut.app](mailto:security@opencut.app) with:
 
-Please do not report security vulnerabilities through public GitHub issues.
+- A clear description of the vulnerability
+- Steps to reproduce (screenshots or proof-of-concept code help)
+- The potential impact or affected components
+- Suggested mitigations, if any
 
-### What to include in your report
+Please avoid filing public GitHub issues for security reports.
 
-- Description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- Any suggested fixes
+## Response timeline
 
-### Response timeline
+- We acknowledge reports within **48 hours**
+- A detailed response arrives within **5 business days**
+- You receive regular updates until the issue is resolved
 
-- We will acknowledge receipt within 48 hours
-- We will provide a detailed response within 5 business days
-- We will keep you updated on our progress
-
-Thank you for helping keep OpenCut secure! 
+Thank you for helping keep OpenCut secure.
